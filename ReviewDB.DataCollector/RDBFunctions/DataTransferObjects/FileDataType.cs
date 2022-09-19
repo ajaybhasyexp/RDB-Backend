@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DataCollectorFunctions.DataTransferObjects
+﻿namespace DataCollectorFunctions.DataTransferObjects
 {
     public enum FileDataType
     {
         Movies,
         TVSeries,
         People,
-        Collections,
-        TVNetworks,
-        Keywords,
-        ProductionCompanies
+        //Collections,
+        //TVNetworks,
+        //Keywords,
+        //ProductionCompanies
     }
 }
