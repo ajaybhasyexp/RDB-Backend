@@ -7,6 +7,6 @@ namespace DataCollectorFunctions.DataTransferObjects
         public string APIFileBaseUrl { get; set; }
         public string APIBaseUrl { get; set; }
         public string AzureFileStorage { get; set; }
-        public string FileDownloadStorage { get; set; }
+        public string FileDownloadQueueStorage { get; set; }
     }
 }

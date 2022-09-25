@@ -1,17 +1,32 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
 using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 
 namespace DataCollectorFunctions.Services
 {
     public class AzureStorageService : IAzureStorageWriter
     {
-        public async Task WriteStreamToStorageBlobAsync(string connectionString, string containerName, string blobName, Stream stream)
+        private string _connectionString { get; set; }
+
+        public AzureStorageService(string connectionString)
         {
-            BlobContainerClient containerClient = new BlobContainerClient(connectionString, containerName);
+            _connectionString = connectionString;
+        }
+
+        public async Task WriteStreamToStorageBlobAsync(string containerName, string blobName, Stream stream)
+        {
+            BlobContainerClient containerClient = new BlobContainerClient(_connectionString, containerName);
             containerClient.CreateIfNotExists();
-            BlobClient blobClient = GetBlobClient(connectionString, containerName, blobName);
+            BlobClient blobClient = GetBlobClient(_connectionString, containerName, blobName);
             await blobClient.UploadAsync(stream, true);
+        }
+
+        public async Task<BlobDownloadResult> ReadStorageBlobAsync(string containerName, string blobName )
+        {
+            BlobClient blobClient = GetBlobClient(_connectionString, containerName, blobName);
+            return await blobClient.DownloadContentAsync();
+
         }
 
         /// <summary>

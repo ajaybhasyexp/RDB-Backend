@@ -20,11 +20,12 @@ namespace DataCollectorFunctions.Functions
             _configuration = configuration;
             _azureStorageWriter = azureStorageWriter;
         }
-        [FunctionName("FileDataCollector")]        
+
+        //[FunctionName("FileDataCollector")]
         public async Task Run([TimerTrigger("30 09 * * *"
-            //,RunOnStartup = true
+            ,RunOnStartup = true
             )] TimerInfo myTimer,
-            [Queue("filedownload", Connection = "FileDownloadStorage")]
+            [Queue(Constants.FileDownloadQueue, Connection = "FileDownloadQueueStorage")]
             ICollector<FileDownloadMessage> fileMessages,
             ILogger log)
         {
@@ -47,7 +48,7 @@ namespace DataCollectorFunctions.Functions
                         stream,
                         CompressionMode.Decompress);
                     await _azureStorageWriter.WriteStreamToStorageBlobAsync(
-                    _configuration.FileDownloadStorage, containerName, blobName, decompressionStream);
+                     containerName, blobName, decompressionStream);
                     log.LogInformation($"Downloaded {blobName}");
                     fileMessages.Add(new FileDownloadMessage(blobName, fileDataType, containerName));
 
